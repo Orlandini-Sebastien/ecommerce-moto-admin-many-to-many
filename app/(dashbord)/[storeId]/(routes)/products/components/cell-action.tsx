@@ -41,10 +41,10 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 			await axios.delete(`/api/${params.storeId}/products/${data.id}`);
 			router.refresh();
 
-			toast.success('Product deleted.');
+			toast.success('Produit supprimé.');
 		} catch (error) {
 			toast.error(
-				'Make sure you removed all categories using this Product first'
+				"Assurez-vous d'abord d'avoir supprimé toutes les catégories utilisant ce produit."
 			);
 		} finally {
 			setLoading(false);
@@ -71,7 +71,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 					<DropdownMenuLabel>Actions</DropdownMenuLabel>
 					<DropdownMenuItem onClick={() => onCopy(data.id)}>
 						<Copy className="mr-2 h-4 w-4" />
-						Copy Id
+						{"Copier l'dentifiant "}
 					</DropdownMenuItem>
 					<DropdownMenuItem
 						onClick={() =>
@@ -79,11 +79,11 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 						}
 					>
 						<Edit className="mr-2 h-4 w-4" />
-						Update
+						Modifier
 					</DropdownMenuItem>
 					<DropdownMenuItem onClick={() => setOpen(true)}>
 						<Trash className="mr-2 h-4 w-4" />
-						Delete
+						Supprimer
 					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>
