@@ -16,19 +16,21 @@ datasource db {
 }
 
 model Store {
-  id         String      @id @default(uuid())
-  name       String
-  userId     String
+  id          String      @id @default(uuid())
+  name        String
+  userId      String
   // Relation avec le billborad
-  billboards Billboard[] @relation("StoreToBillboard")
+  billboards  Billboard[] @relation("StoreToBillboard")
   //Reletion avec les catégories
-  categories Category[]  @relation("StoreToCategory")
+  categories  Category[]  @relation("StoreToCategory")
+  contact     Contact?    @relation("StoreToContact")
+  testimonies Testimony[] @relation("StoreToTestimony")
   //Relation avec Size
-  sizes      Size[]      @relation("StoreToSize")
+  sizes       Size[]      @relation("StoreToSize")
   //Relation avec Color
-  colors     Color[]     @relation("StoreToColor")
+  colors      Color[]     @relation("StoreToColor")
   //Relation avec Product
-  products   Product[]   @relation("StoreToProduct")
+  products    Product[]   @relation("StoreToProduct")
 
   //Relation avec Order
   orders   Order[]  @relation("StoreToOrder")
@@ -155,4 +157,37 @@ model OrderItem {
 
   @@index([orderId])
   @@index([productId])
+}
+
+model Contact {
+  id        String @id @default(uuid())
+  storeId   String @unique
+  store     Store  @relation("StoreToContact", fields: [storeId], references: [id])
+  firstname String @default("")
+  name      String @default("")
+  imageURL  String @default("")
+  phone     String @default("")
+  mail      String @default("")
+
+  adress        String @default("") // pour la rue et le numéro de la rue
+  postal        String @default("") // Pour le code postal et le nom de la ville
+  country       String @default("") // Et bien renseigner que l'on est en france
+  imageURLPlace String @default("") // Prendre en photo le lieu du magasin
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([storeId])
+}
+
+model Testimony {
+  id          String   @id @default(uuid())
+  storeId     String
+  store       Store    @relation("StoreToTestimony", fields: [storeId], references: [id])
+  name        String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([storeId])
 }
