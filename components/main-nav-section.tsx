@@ -23,9 +23,9 @@ export function MainNavSection({
 			active: pathname === `/${params.storeId}/testimonies`,
 		},
 		{
-			href: `/${params.storeId}/faq`,
+			href: `/${params.storeId}/questions`,
 			label: 'Faq',
-			active: pathname === `/${params.storeId}/faq`,
+			active: pathname === `/${params.storeId}/questions`,
 		},
 	
 	

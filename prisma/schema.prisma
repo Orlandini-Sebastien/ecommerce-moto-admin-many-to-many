@@ -25,6 +25,7 @@ model Store {
   categories  Category[]  @relation("StoreToCategory")
   contact     Contact?    @relation("StoreToContact")
   testimonies Testimony[] @relation("StoreToTestimony")
+  questions   Question[]  @relation("StoreToQuestion")
   //Relation avec Size
   sizes       Size[]      @relation("StoreToSize")
   //Relation avec Color
@@ -186,6 +187,18 @@ model Testimony {
   store       Store    @relation("StoreToTestimony", fields: [storeId], references: [id])
   name        String
   description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([storeId])
+}
+
+model Question {
+  id          String   @id @default(uuid())
+  storeId     String
+  store       Store    @relation("StoreToQuestion", fields: [storeId], references: [id])
+  question    String
+  answer      String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
