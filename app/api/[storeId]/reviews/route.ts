@@ -11,15 +11,15 @@ export async function POST(
 		const { userId } = auth();
 		const body = await req.json();
 
-		const { name, description } = body;
+		const { source, link } = body;
 		if (!userId) {
 			return new NextResponse('Unauthenticated', { status: 401 });
 		}
-		if (!name) {
-			return new NextResponse('Name is required', { status: 400 });
+		if (!source) {
+			return new NextResponse('Source is required', { status: 400 });
 		}
-		if (!description) {
-			return new NextResponse('Description is required', { status: 400 });
+		if (!link) {
+			return new NextResponse('Link is required', { status: 400 });
 		}
 		if (!params.storeId) {
 			return new NextResponse('Store id is required', { status: 400 });
@@ -38,21 +38,21 @@ export async function POST(
 		}
 		// -------------------------------------------
 
-		const testimony = await prismadb.testimony.create({
+		const review = await prismadb.review.create({
 			data: {
-				name,
-				description,
+				source,
+				link,
 				storeId: params.storeId,
 			},
 		});
 
-		return NextResponse.json(testimony);
+		return NextResponse.json(review);
 
 		// Traitement supplémentaire ici...
 
 		return new NextResponse('Success', { status: 200 });
 	} catch (error) {
-		console.log('[TESTIMONY_POST]', error);
+		console.log('[REVIEW_POST]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }
@@ -66,15 +66,15 @@ export async function GET(
 			return new NextResponse('Store id is required', { status: 400 });
 		}
 
-		const testimonies = await prismadb.testimony.findMany({
+		const reviews = await prismadb.review.findMany({
 			where: {
 				storeId: params.storeId,
 			},
 		});
 
-		return NextResponse.json(testimonies);
+		return NextResponse.json(reviews);
 	} catch (error) {
-		console.log('[TESTIMONIES_GET]', error);
+		console.log('[REVIEWS_GET]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }

@@ -5,44 +5,44 @@ import prismadb from '@/lib/prismadb';
 
 export async function GET(
 	req: Request, // Même inutiliser on doit le garder tout de même
-	{ params }: { params: { testimonyId: string } }
+	{ params }: { params: { reviewId: string } }
 ) {
 	try {
-		if (!params.testimonyId) {
+		if (!params.reviewId) {
 			return new NextResponse('Testimony id is required', { status: 400 });
 		}
 
-		const testimony = await prismadb.testimony.findUnique({
+		const review = await prismadb.review.findUnique({
 			where: {
-				id: params.testimonyId,
+				id: params.reviewId,
 			},
 		});
-		return NextResponse.json(testimony);
+		return NextResponse.json(review);
 	} catch (error) {
-		console.log('[TESTIMONY_GET]', error);
+		console.log('[REVIEW_GET]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }
 
 export async function PATCH(
 	req: Request,
-	{ params }: { params: { storeId: string; testimonyId: string } }
+	{ params }: { params: { storeId: string; reviewId: string } }
 ) {
 	try {
 		const { userId } = auth();
 		const body = await req.json();
-		const { name, description } = body;
+		const { source, link } = body;
 
 		if (!userId) {
 			return new NextResponse('Unauthenticated', { status: 401 });
 		}
-		if (!name) {
+		if (!source) {
 			return new NextResponse('Name is required', { status: 400 });
 		}
-		if (!description) {
-			return new NextResponse('Description is required', { status: 400 });
+		if (!link) {
+			return new NextResponse('link is required', { status: 400 });
 		}
-		if (!params.testimonyId) {
+		if (!params.reviewId) {
 			return new NextResponse('Size id is required', { status: 400 });
 		}
 
@@ -59,25 +59,25 @@ export async function PATCH(
 		}
 		// -------------------------------------------
 
-		const testimony = await prismadb.testimony.updateMany({
+		const review = await prismadb.review.updateMany({
 			where: {
-				id: params.testimonyId,
+				id: params.reviewId,
 			},
 			data: {
-				name,
-				description,
+				source,
+				link,
 			},
 		});
-		return NextResponse.json(testimony);
+		return NextResponse.json(review);
 	} catch (error) {
-		console.log('[TESTIMONY_PATCH]', error);
+		console.log('[REVIEW_PATCH]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }
 
 export async function DELETE(
 	req: Request, // Même inutiliser on doit le garder tout de même
-	{ params }: { params: { storeId: string; testimonyId: string } }
+	{ params }: { params: { storeId: string; reviewId: string } }
 ) {
 	try {
 		const { userId } = auth();
@@ -86,7 +86,7 @@ export async function DELETE(
 			return new NextResponse('Unauthenticated', { status: 401 });
 		}
 
-		if (!params.testimonyId) {
+		if (!params.reviewId) {
 			return new NextResponse('Testimony id is required', { status: 400 });
 		}
 
@@ -103,14 +103,14 @@ export async function DELETE(
 		}
 		// -------------------------------------------
 
-		const testimony = await prismadb.testimony.deleteMany({
+		const review = await prismadb.review.deleteMany({
 			where: {
-				id: params.testimonyId,
+				id: params.reviewId,
 			},
 		});
-		return NextResponse.json(testimony);
+		return NextResponse.json(review);
 	} catch (error) {
-		console.log('[TESTIMONY_DELETE]', error);
+		console.log('[REVIEW_DELETE]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }

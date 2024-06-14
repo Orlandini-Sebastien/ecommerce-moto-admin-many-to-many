@@ -12,12 +12,12 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { TestimonyColumn } from './columns';
+import { ReviewColumn } from './columns';
 import { Button } from '@/components/ui/button';
 import { AlertModal } from '@/components/modals/alert-modal';
 
 interface CellActionProps {
-	data: TestimonyColumn;
+	data: ReviewColumn;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
@@ -38,7 +38,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 	const onDelete = async () => {
 		try {
 			setLoading(true);
-			await axios.delete(`/api/${params.storeId}/testimonies/${data.id}`);
+			await axios.delete(`/api/${params.storeId}/reviews/${data.id}`);
 			router.refresh();
 
 			toast.success('Avis supprimé.');
@@ -73,7 +73,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 					</DropdownMenuItem>
 					<DropdownMenuItem
 						onClick={() =>
-							router.push(`/${params.storeId}/testimonies/${data.id}`)
+							router.push(`/${params.storeId}/reviews/${data.id}`)
 						}
 					>
 						<Edit className="mr-2 h-4 w-4" />

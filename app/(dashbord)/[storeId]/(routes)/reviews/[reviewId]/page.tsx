@@ -1,25 +1,25 @@
 import prismadb from '@/lib/prismadb';
-import {TestimonyForm} from './components/testimony-form';
+import {ReviewForm} from './components/review-form';
 
 // on peut récupérer le params car c'est un serveur component
-const TestimonyPage = async ({
+const ReviewPage = async ({
 	params,
 }: {
-	params: { testimonyId: string };
+	params: { reviewId: string };
 }) => {
 	// On fetch un billborad existant
-	const testimony = await prismadb.testimony.findUnique({
+	const review = await prismadb.review.findUnique({
 		where: {
-			id: params.testimonyId,
+			id: params.reviewId,
 		},
 	});
 	return (
 		<div className="flex-col">
 			<div className="flex-1 spcace-y-4 p-8 pt-6">
-                <TestimonyForm initalData={testimony}/>
+                <ReviewForm initalData={review}/>
             </div>
 		</div>
 	);
 };
 
-export default TestimonyPage;
+export default ReviewPage;

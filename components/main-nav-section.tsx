@@ -18,19 +18,15 @@ export function MainNavSection({
 			active: pathname === `/${params.storeId}/contact`,
 		},
 		{
-			href: `/${params.storeId}/testimonies`,
-			label: 'Témoignages',
-			active: pathname === `/${params.storeId}/testimonies`,
+			href: `/${params.storeId}/reviews`,
+			label: 'Avis',
+			active: pathname === `/${params.storeId}/reviews`,
 		},
 		{
 			href: `/${params.storeId}/questions`,
 			label: 'Faq',
 			active: pathname === `/${params.storeId}/questions`,
 		},
-	
-	
-	
-	
 	];
 	return (
 		<nav className={cn('flex item-center space-x-4 lg:space-x-6', className)}>

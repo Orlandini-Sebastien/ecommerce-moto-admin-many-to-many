@@ -16,22 +16,23 @@ datasource db {
 }
 
 model Store {
-  id          String      @id @default(uuid())
-  name        String
-  userId      String
+  id         String      @id @default(uuid())
+  name       String
+  userId     String
   // Relation avec le billborad
-  billboards  Billboard[] @relation("StoreToBillboard")
+  billboards Billboard[] @relation("StoreToBillboard")
   //Reletion avec les catégories
-  categories  Category[]  @relation("StoreToCategory")
-  contact     Contact?    @relation("StoreToContact")
-  testimonies Testimony[] @relation("StoreToTestimony")
-  questions   Question[]  @relation("StoreToQuestion")
+  categories Category[]  @relation("StoreToCategory")
+  contact    Contact?    @relation("StoreToContact")
+  about      About?      @relation("StoreToAbout")
+  reviews    Review[]    @relation("StoreToReview")
+  questions  Question[]  @relation("StoreToQuestion")
   //Relation avec Size
-  sizes       Size[]      @relation("StoreToSize")
+  sizes      Size[]      @relation("StoreToSize")
   //Relation avec Color
-  colors      Color[]     @relation("StoreToColor")
+  colors     Color[]     @relation("StoreToColor")
   //Relation avec Product
-  products    Product[]   @relation("StoreToProduct")
+  products   Product[]   @relation("StoreToProduct")
 
   //Relation avec Order
   orders   Order[]  @relation("StoreToOrder")
@@ -181,26 +182,49 @@ model Contact {
   @@index([storeId])
 }
 
-model Testimony {
-  id          String   @id @default(uuid())
-  storeId     String
-  store       Store    @relation("StoreToTestimony", fields: [storeId], references: [id])
-  name        String
-  description String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+model Review {
+  id        String   @id @default(uuid())
+  storeId   String
+  store     Store    @relation("StoreToReview", fields: [storeId], references: [id])
+  source    String
+  link      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([storeId])
 }
 
 model Question {
-  id          String   @id @default(uuid())
-  storeId     String
-  store       Store    @relation("StoreToQuestion", fields: [storeId], references: [id])
-  question    String
-  answer      String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(uuid())
+  storeId   String
+  store     Store    @relation("StoreToQuestion", fields: [storeId], references: [id])
+  question  String
+  answer    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([storeId])
+}
+
+model About {
+  id                  String  @id @default(uuid())
+  storeId             String  @unique
+  store               Store   @relation("StoreToAbout", fields: [storeId], references: [id])
+  introduction        String? // Company name  , vision et mission
+  history             String?
+  team                String? // key members and their value
+  services            String? // general product and why you are different
+  personnalMotivation String? // why you start this
+  putForward          String? // hightlight these main achievements
+  value               String? // what's your personnal value
+
+  introPicture               String?
+  historyPicture             String?
+  teamPicture                String?
+  servicesPicture            String?
+  personnalMotivationPicture String?
+  putForwardPicture          String?
+  valuePicture               String?
 
   @@index([storeId])
 }

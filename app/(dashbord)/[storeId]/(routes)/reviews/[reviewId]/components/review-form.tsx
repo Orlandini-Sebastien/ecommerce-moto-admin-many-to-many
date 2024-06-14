@@ -1,7 +1,7 @@
 'use client';
 
 import * as z from 'zod';
-import { Testimony } from '@prisma/client';
+import { Review } from '@prisma/client';
 import { Trash } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -26,17 +26,17 @@ import { AlertModal } from '@/components/modals/alert-modal';
 
 //Creation du schema avec zod
 const formSchema = z.object({
-	name: z.string().min(1),
-	description: z.string().min(1),
+	source: z.string().min(1),
+	link: z.string().min(1),
 });
 
-type TestimonyFormValues = z.infer<typeof formSchema>;
+type ReviewFormValues = z.infer<typeof formSchema>;
 // ---------------------------
 
-interface TestimonyFormProps {
-	initalData: Testimony | null;
+interface ReviewFormProps {
+	initalData: Review | null;
 }
-export const TestimonyForm: React.FC<TestimonyFormProps> = ({ initalData }) => {
+export const ReviewForm: React.FC<ReviewFormProps> = ({ initalData }) => {
 	const params = useParams();
 	const router = useRouter();
 
@@ -49,30 +49,30 @@ export const TestimonyForm: React.FC<TestimonyFormProps> = ({ initalData }) => {
 	const action = initalData ? 'Sauvegarder' : 'Créer';
 
 	//utilisation de zod pour le form
-	const form = useForm<TestimonyFormValues>({
+	const form = useForm<ReviewFormValues>({
 		resolver: zodResolver(formSchema),
 		defaultValues: initalData || {
-			name: '',
-			description: '',
+			source: '',
+			link: '',
 		},
 	});
 	// --------------------------------
 
 	// creation du form
-	const onSubmit = async (data: TestimonyFormValues) => {
+	const onSubmit = async (data: ReviewFormValues) => {
 		try {
 			setLoading(true);
 			if (initalData) {
 				await axios.patch(
-					`/api/${params.storeId}/testimonies/${params.testimonyId}`,
+					`/api/${params.storeId}/reviews/${params.reviewId}`,
 					data
 				);
 			} else {
-				await axios.post(`/api/${params.storeId}/testimonies`, data);
+				await axios.post(`/api/${params.storeId}/reviews`, data);
 			}
 
 			// Pour aller sur la page size une fois un changement
-			router.push(`/${params.storeId}/testimonies`);
+			router.push(`/${params.storeId}/reviews`);
 			// ------
 			router.refresh();
 			toast.success(toastMessage);
@@ -87,11 +87,11 @@ export const TestimonyForm: React.FC<TestimonyFormProps> = ({ initalData }) => {
 		try {
 			setLoading(true);
 			await axios.delete(
-				`/api/${params.storeId}/testimonies/${params.testimonyId}`
+				`/api/${params.storeId}/reviews/${params.reviewId}`
 			);
-			router.push(`/${params.storeId}/testimonies`);
+			router.push(`/${params.storeId}/reviews`);
 			router.refresh();
-			toast.success('Témoignage supprimé.');
+			toast.success('Avis supprimé.');
 		} catch (error) {
 			toast.error("Assurez-vous d'abord d'avoir supprimé tous les avis");
 		} finally {
@@ -131,14 +131,14 @@ export const TestimonyForm: React.FC<TestimonyFormProps> = ({ initalData }) => {
 					<div className="grid grid-cols-3 gap-8">
 						<FormField
 							control={form.control}
-							name="name"
+							name="source"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Nom</FormLabel>
+									<FormLabel>Source</FormLabel>
 									<FormControl>
 										<Input
 											disabled={loading}
-											placeholder="Nom du témoin"
+											placeholder="Google"
 											{...field}
 										/>
 									</FormControl>
@@ -148,14 +148,14 @@ export const TestimonyForm: React.FC<TestimonyFormProps> = ({ initalData }) => {
 						/>
 						<FormField
 							control={form.control}
-							name="description"
+							name="link"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Commentaire</FormLabel>
+									<FormLabel>Link</FormLabel>
 									<FormControl>
 										<Input
 											disabled={loading}
-											placeholder="Ecrire le commentaire"
+											placeholder="Insérer le lien de SociableKit"
 											{...field}
 										/>
 									</FormControl>

@@ -3,21 +3,21 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { CellAction } from './cell-action';
 
-export type TestimonyColumn = {
+export type ReviewColumn = {
 	id: string;
-	name: string;
-	description: string;
+	source: string;
+	link: string;
 	createdAt: string;
 };
 
-export const columns: ColumnDef<TestimonyColumn>[] = [
+export const columns: ColumnDef<ReviewColumn>[] = [
 	{
-		accessorKey: 'name',
-		header: 'Nom',
+		accessorKey: 'source',
+		header: 'Source',
 	},
 	{
-		accessorKey: 'description',
-		header: 'Témoignages',
+		accessorKey: 'link',
+		header: 'Link',
 	},
 	{
 		accessorKey: 'createdAt',
