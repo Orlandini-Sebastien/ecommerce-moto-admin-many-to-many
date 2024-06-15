@@ -17,7 +17,8 @@ export async function POST(req: Request) {
 			signature,
 			process.env.STRIPE_WEBHOOK_SECRET!
 		);
-	} catch (error : any) {
+		// !!!!!!!!!!!!!!!! attention ici c'est error:any a chaque fois que je sauvegarde cela me met une erreur
+	} catch (error:any) {
 		return new NextResponse(`Webhook Error: ${error.message}`, { status: 400 });
 	}
 
@@ -31,7 +32,6 @@ export async function POST(req: Request) {
 		address?.state,
 		address?.postal_code,
 		address?.country,
-		
 	];
 
 	const addressString = addressComponents.filter((c) => c !== null).join(', ');
@@ -44,6 +44,7 @@ export async function POST(req: Request) {
 			data: {
 				isPaid: true,
 				address: addressString,
+				phone: session?.customer_details?.phone || '',
 			},
 			include: {
 				orderItems: true,
@@ -52,16 +53,16 @@ export async function POST(req: Request) {
 
 		const productIds = order.orderItems.map((orderItem) => orderItem.productId);
 
-        await prismadb.product.updateMany({
-            where: {
-                id : {
-                    in : [...productIds]
-                }
-            },
-            data : {
-                isArchived:true
-            }
-        })
+		await prismadb.product.updateMany({
+			where: {
+				id: {
+					in: [...productIds],
+				},
+			},
+			data: {
+				isArchived: true,
+			},
+		});
 	}
-    return new NextResponse(null , {status : 200})
+	return new NextResponse(null, { status: 200 });
 }

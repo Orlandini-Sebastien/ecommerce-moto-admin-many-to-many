@@ -48,6 +48,8 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 	initalData,
 	billboards,
 }) => {
+
+	
 	const params = useParams();
 	const router = useRouter();
 
