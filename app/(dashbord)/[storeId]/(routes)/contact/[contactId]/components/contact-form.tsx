@@ -159,6 +159,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ initalData }) => {
 											disable={loading}
 											onChange={(url) => field.onChange(url)}
 											onRemove={() => field.onChange('')}
+											localisation='vervel_moto_piece/contact'
 										/>
 									</FormControl>
 									<FormMessage />
@@ -177,6 +178,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ initalData }) => {
 											disable={loading}
 											onChange={(url) => field.onChange(url)}
 											onRemove={() => field.onChange('')}
+											localisation='vervel_moto_piece/contact'
 										/>
 									</FormControl>
 									<FormMessage />

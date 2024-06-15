@@ -43,9 +43,11 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ initalData }) => {
 	const [open, setOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
 
-	const title = initalData ? 'Modifier le témoignage' : 'Créer un témoignage';
-	const description = initalData ? 'Editer vos avis' : 'Ajouter vos avis';
-	const toastMessage = initalData ? 'Témoignage modifié.' : 'Témoignage créé.';
+	const title = initalData ? 'Modifier les avis' : 'Ajouter les avis';
+	const description = initalData
+		? 'Modifier les liens'
+		: 'Ajouter les liens de vos avis';
+	const toastMessage = initalData ? 'Avis modifiés.' : 'Avis créés.';
 	const action = initalData ? 'Sauvegarder' : 'Créer';
 
 	//utilisation de zod pour le form
@@ -86,9 +88,7 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ initalData }) => {
 	const onDelete = async () => {
 		try {
 			setLoading(true);
-			await axios.delete(
-				`/api/${params.storeId}/reviews/${params.reviewId}`
-			);
+			await axios.delete(`/api/${params.storeId}/reviews/${params.reviewId}`);
 			router.push(`/${params.storeId}/reviews`);
 			router.refresh();
 			toast.success('Avis supprimé.');
@@ -136,11 +136,7 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ initalData }) => {
 								<FormItem>
 									<FormLabel>Source</FormLabel>
 									<FormControl>
-										<Input
-											disabled={loading}
-											placeholder="Google"
-											{...field}
-										/>
+										<Input disabled={loading} placeholder="Google" {...field} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>

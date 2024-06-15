@@ -210,21 +210,21 @@ model About {
   id                  String  @id @default(uuid())
   storeId             String  @unique
   store               Store   @relation("StoreToAbout", fields: [storeId], references: [id])
-  introduction        String? // Company name  , vision et mission
-  history             String?
-  team                String? // key members and their value
-  services            String? // general product and why you are different
-  personnalMotivation String? // why you start this
-  putForward          String? // hightlight these main achievements
-  value               String? // what's your personnal value
+  introduction        String?  @default("") // Company name  , vision et mission
+  history             String?  @default("")
+  team                String?  @default("") // key members and their value
+  services            String?  @default("") // general product and why you are different
+  personnalMotivation String?  @default("") // why you start this
+  putForward          String?  @default("") // hightlight these main achievements
+  value               String?  @default("") // what's your personnal value
 
-  introPicture               String?
-  historyPicture             String?
-  teamPicture                String?
-  servicesPicture            String?
-  personnalMotivationPicture String?
-  putForwardPicture          String?
-  valuePicture               String?
+  introPicture               String?  @default("")
+  historyPicture             String?  @default("")
+  teamPicture                String?  @default("")
+  servicesPicture            String?  @default("")
+  personnalMotivationPicture String?  @default("")
+  putForwardPicture          String?  @default("")
+  valuePicture               String?  @default("")
 
   @@index([storeId])
 }

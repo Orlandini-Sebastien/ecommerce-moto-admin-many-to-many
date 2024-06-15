@@ -12,6 +12,7 @@ interface ImageUploadProps {
 	onChange: (value: string) => void;
 	onRemove: (value: string) => void;
 	value: string[];
+	localisation: string;
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
@@ -19,6 +20,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 	onChange,
 	onRemove,
 	value,
+	localisation,
 }) => {
 	const [isMounted, setIsMounted] = useState(false);
 	useEffect(() => {
@@ -55,7 +57,12 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 					</div>
 				))}
 			</div>
-			<CldUploadWidget onUpload={onUpload} uploadPreset="hawzgdbb">
+			{/* Ajout d'un folder en dur */}
+			<CldUploadWidget
+				onUpload={onUpload}
+				uploadPreset="hawzgdbb"
+				options={{ folder: `${localisation}` }}
+			>
 				{({ open }) => {
 					const onClick = () => {
 						open();

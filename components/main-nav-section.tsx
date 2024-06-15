@@ -27,6 +27,11 @@ export function MainNavSection({
 			label: 'Faq',
 			active: pathname === `/${params.storeId}/questions`,
 		},
+		{
+			href: `/${params.storeId}/about`,
+			label: 'À Propos',
+			active: pathname === `/${params.storeId}/about`,
+		},
 	];
 	return (
 		<nav className={cn('flex item-center space-x-4 lg:space-x-6', className)}>

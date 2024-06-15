@@ -146,6 +146,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({ initalData }) => {
 										disable={loading}
 										onChange={(url) => field.onChange(url)}
 										onRemove={() => field.onChange('')}
+										localisation='vervel_moto_piece/billboard'
 									/>
 								</FormControl>
 								<FormMessage />

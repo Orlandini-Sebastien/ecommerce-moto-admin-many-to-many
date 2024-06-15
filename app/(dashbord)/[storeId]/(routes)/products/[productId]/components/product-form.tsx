@@ -191,6 +191,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 												...field.value.filter((current) => current.url !== url),
 											])
 										}
+										localisation='vervel_moto_piece/product'
 									/>
 								</FormControl>
 								<FormMessage />
