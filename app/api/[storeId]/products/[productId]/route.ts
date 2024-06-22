@@ -46,6 +46,7 @@ export async function PATCH(
 			images,
 			isFeatured,
 			isArchived,
+			description
 		} = body;
 
 		if (!userId) {
@@ -96,6 +97,7 @@ export async function PATCH(
 				categoryId,
 				colorId,
 				sizeId,
+				description,
 				images: {
 					deleteMany: {},
 				},
