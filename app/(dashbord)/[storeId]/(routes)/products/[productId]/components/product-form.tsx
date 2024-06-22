@@ -34,6 +34,7 @@ import {
 	SelectValue,
 } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Textarea } from '@/components/ui/textarea';
 
 //Creation du schema avec zod
 const formSchema = z.object({
@@ -46,6 +47,11 @@ const formSchema = z.object({
 	price: z.coerce.number().min(1),
 	isFeatured: z.boolean().default(false).optional(),
 	isArchived: z.boolean().default(false).optional(),
+
+	description: z
+		.string()
+		.max(400, { message: 'Décrire votre produit si besoin' })
+		.optional(),
 });
 
 type ProductFormValues = z.infer<typeof formSchema>;
@@ -90,16 +96,19 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 					price: parseFloat(String(initalData?.price)),
 					colorId: initalData.colorId ?? undefined,
 					sizeId: initalData.sizeId ?? undefined,
+					description: initalData.description ?? undefined,
 			  }
 			: {
 					name: '',
 					images: [],
 					price: 0,
 					categoryId: '',
-					colorId: undefined,
-					sizeId: undefined,
 					isFeatured: false,
 					isArchived: false,
+
+					sizeId: undefined,
+					colorId: undefined,
+					description: undefined,
 			  },
 	});
 	// --------------------------------
@@ -380,7 +389,31 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 								</FormItem>
 							)}
 						/>
+					
 					</div>
+					<FormField
+							control={form.control}
+							name="description"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Description</FormLabel>
+									<FormControl>
+										<Textarea
+											className="bg-background resize-none"
+											rows={7}
+											placeholder={'Décrire votre produit si besoin'}
+											{...field}
+										/>
+									</FormControl>
+									<FormDescription>
+										{
+											'Ajouter les détails pertinents pour la vente de votre produit'
+										}
+									</FormDescription>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 					<Button disabled={loading} className="ml-auto" type="submit">
 						{action}
 					</Button>

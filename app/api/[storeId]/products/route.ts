@@ -17,11 +17,13 @@ export async function POST(
 			name,
 			images,
 			categoryId,
-			colorId,
-			sizeId,
 			price,
 			isFeatured,
 			isArchived,
+
+			sizeId,
+			colorId,
+			description
 		} = body;
 
 		if (!userId) {
@@ -84,6 +86,7 @@ export async function POST(
 				storeId: params.storeId,
 				...(colorId && { colorId }),
 				...(sizeId && { sizeId }),
+				...(description && { description }),
 			},
 		});
 
