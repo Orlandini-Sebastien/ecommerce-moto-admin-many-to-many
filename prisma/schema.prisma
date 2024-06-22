@@ -19,22 +19,15 @@ model Store {
   id         String      @id @default(uuid())
   name       String
   userId     String
-  // Relation avec le billborad
   billboards Billboard[] @relation("StoreToBillboard")
-  //Reletion avec les catégories
   categories Category[]  @relation("StoreToCategory")
   contact    Contact?    @relation("StoreToContact")
   about      About?      @relation("StoreToAbout")
   reviews    Review[]    @relation("StoreToReview")
   questions  Question[]  @relation("StoreToQuestion")
-  //Relation avec Size
   sizes      Size[]      @relation("StoreToSize")
-  //Relation avec Color
   colors     Color[]     @relation("StoreToColor")
-  //Relation avec Product
   products   Product[]   @relation("StoreToProduct")
-
-  //Relation avec Order
   orders   Order[]  @relation("StoreToOrder")
   createAt DateTime @default(now())
   updateAt DateTime @updatedAt
@@ -108,10 +101,10 @@ model Product {
   price      Decimal
   isFeatured Boolean     @default(false)
   isArchived Boolean     @default(false)
-  sizeId     String
-  size       Size        @relation(fields: [sizeId], references: [id])
-  colorId    String
-  color      Color       @relation(fields: [colorId], references: [id])
+  sizeId     String?
+  size       Size?        @relation(fields: [sizeId], references: [id])
+  colorId    String?
+  color      Color?       @relation(fields: [colorId], references: [id])
   images     Image[]
   orderItems OrderItem[]
   createdAt  DateTime    @default(now())

@@ -11,6 +11,8 @@ export async function POST(
 		const { userId } = auth();
 		const body = await req.json();
 
+		console.log(body);
+
 		const {
 			name,
 			images,
@@ -40,12 +42,12 @@ export async function POST(
 		if (!categoryId) {
 			return new NextResponse('Category id is required', { status: 400 });
 		}
-		if (!sizeId) {
-			return new NextResponse('Size id is required', { status: 400 });
-		}
-		if (!colorId) {
-			return new NextResponse('Color id is required', { status: 400 });
-		}
+		// if (!sizeId) {
+		// 	return new NextResponse('Size id is required', { status: 400 });
+		// }
+		// if (!colorId) {
+		// 	return new NextResponse('Color id is required', { status: 400 });
+		// }
 
 		if (!params.storeId) {
 			return new NextResponse('Store id is required', { status: 400 });
@@ -75,12 +77,13 @@ export async function POST(
 					},
 				},
 				categoryId,
-				colorId,
-				sizeId,
+
 				price,
 				isFeatured,
 				isArchived,
 				storeId: params.storeId,
+				...(colorId && { colorId }),
+				...(sizeId && { sizeId }),
 			},
 		});
 
@@ -106,7 +109,7 @@ export async function GET(
 		const colorId = searchParams.get('colorId') || undefined;
 		const sizeId = searchParams.get('sizeId') || undefined;
 		const isFeatured = searchParams.get('isFeatured');
-		
+
 		if (!params.storeId) {
 			return new NextResponse('Store id is required', { status: 400 });
 		}

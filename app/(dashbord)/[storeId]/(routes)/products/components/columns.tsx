@@ -7,12 +7,12 @@ export type ProductColumn = {
 	id: string;
 	name: string;
 	price: string;
-	size: string;
 	category: string;
-	color: string;
 	isFeatured: boolean;
 	isArchived: boolean;
 	createdAt: string;
+	color?: string;
+	size?: string;
 };
 
 export const columns: ColumnDef<ProductColumn>[] = [
@@ -39,21 +39,23 @@ export const columns: ColumnDef<ProductColumn>[] = [
 	{
 		accessorKey: 'size',
 		header: 'Modèle',
+		cell: ({ row }) => (row.original.size ? row.original.size : 'Non défini'),
 	},
 	{
 		accessorKey: 'color',
 		header: 'Couleur',
-		cell: ({ row }) => (
-			<div className="flex items-center gap-x-2">
-				{row.original.color}
-				<div
-					className="h-6 w-6 rounded-full border"
-					// La class dynamique en dehors de tailwind pour etre sur de compiler
-					// on évite bg-[${}] qui marche pas
-					style={{ backgroundColor: row.original.color }}
-				/>
-			</div>
-		),
+		cell: ({ row }) =>
+			row.original.color ? (
+				<div className="flex items-center gap-x-2">
+					{row.original.color}
+					<div
+						className="h-6 w-6 rounded-full border"
+						style={{ backgroundColor: row.original.color }}
+					/>
+				</div>
+			) : (
+				'Non défini'
+			), // Gestion optionnelle pour color
 	},
 	{
 		accessorKey: 'createdAt',
@@ -65,3 +67,5 @@ export const columns: ColumnDef<ProductColumn>[] = [
 		cell: ({ row }) => <CellAction data={row.original} />,
 	},
 ];
+
+

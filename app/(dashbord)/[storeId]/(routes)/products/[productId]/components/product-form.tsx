@@ -41,8 +41,8 @@ const formSchema = z.object({
 	images: z.object({ url: z.string() }).array(),
 	//Pour les décimales
 	categoryId: z.string().min(1),
-	colorId: z.string().min(1),
-	sizeId: z.string().min(1),
+	colorId: z.string().min(1).optional(),
+	sizeId: z.string().min(1).optional(),
 	price: z.coerce.number().min(1),
 	isFeatured: z.boolean().default(false).optional(),
 	isArchived: z.boolean().default(false).optional(),
@@ -85,14 +85,19 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 		resolver: zodResolver(formSchema),
 		// comme on a un float, et que dans prisma et la database non
 		defaultValues: initalData
-			? { ...initalData, price: parseFloat(String(initalData?.price)) }
+			? {
+					...initalData,
+					price: parseFloat(String(initalData?.price)),
+					colorId: initalData.colorId ?? undefined,
+					sizeId: initalData.sizeId ?? undefined,
+			  }
 			: {
 					name: '',
 					images: [],
 					price: 0,
 					categoryId: '',
-					colorId: '',
-					sizeId: '',
+					colorId: undefined,
+					sizeId: undefined,
 					isFeatured: false,
 					isArchived: false,
 			  },
@@ -109,6 +114,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 					data
 				);
 			} else {
+				console.log(data);
 				await axios.post(`/api/${params.storeId}/products`, data);
 			}
 
@@ -191,7 +197,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 												...field.value.filter((current) => current.url !== url),
 											])
 										}
-										localisation='vervel_moto_piece/product'
+										localisation="vervel_moto_piece/product"
 									/>
 								</FormControl>
 								<FormMessage />
