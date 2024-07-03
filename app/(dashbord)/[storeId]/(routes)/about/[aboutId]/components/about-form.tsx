@@ -25,6 +25,7 @@ import { Input } from '@/components/ui/input';
 import { AlertModal } from '@/components/modals/alert-modal';
 
 import ImageUpload from '@/components/ui/image-upload';
+import { Textarea } from '@/components/ui/textarea';
 
 //Creation du schema avec zod
 const formSchema = z.object({
@@ -163,10 +164,11 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 								<FormItem>
 									<FormLabel>Introduction </FormLabel>
 									<FormControl>
-										<Input
+										<Textarea
 											disabled={loading}
-											placeholder="Introduction de la page"
-											{...field}
+											className="bg-background resize-none"
+											rows={9}
+											placeholder={'Introduction de la page'}
 											value={field.value ?? ''}
 										/>
 									</FormControl>
@@ -186,7 +188,7 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 											disable={loading}
 											onChange={(url) => field.onChange(url)}
 											onRemove={() => field.onChange('')}
-											localisation='vervel_moto_piece/about'
+											localisation="vervel_moto_piece/about"
 										/>
 									</FormControl>
 									<FormMessage />
@@ -204,10 +206,11 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 								<FormItem>
 									<FormLabel>Histoire perso / entreprise </FormLabel>
 									<FormControl>
-										<Input
+										<Textarea
 											disabled={loading}
-											placeholder="C'est comme cela que tout à commencer"
-											{...field}
+											className="bg-background resize-none"
+											rows={9}
+											placeholder={"C'est comme cela que tout à commence"}
 											value={field.value ?? ''}
 										/>
 									</FormControl>
@@ -227,7 +230,7 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 											disable={loading}
 											onChange={(url) => field.onChange(url)}
 											onRemove={() => field.onChange('')}
-											localisation='vervel_moto_piece/about'
+											localisation="vervel_moto_piece/about"
 										/>
 									</FormControl>
 									<FormMessage />
@@ -245,10 +248,11 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 								<FormItem>
 									<FormLabel>Votre Equipe </FormLabel>
 									<FormControl>
-										<Input
+										<Textarea
 											disabled={loading}
-											placeholder="Petite description"
-											{...field}
+											className="bg-background resize-none"
+											rows={9}
+											placeholder={'Petite description'}
 											value={field.value ?? ''}
 										/>
 									</FormControl>
@@ -268,7 +272,7 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 											disable={loading}
 											onChange={(url) => field.onChange(url)}
 											onRemove={() => field.onChange('')}
-											localisation='vervel_moto_piece/about'
+											localisation="vervel_moto_piece/about"
 										/>
 									</FormControl>
 									<FormMessage />
@@ -285,10 +289,11 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 								<FormItem>
 									<FormLabel>Services </FormLabel>
 									<FormControl>
-										<Input
+										<Textarea
 											disabled={loading}
-											placeholder="Les différents types de produit & en quoi vous êtes différents"
-											{...field}
+											className="Les différents types de produit & en quoi vous êtes différents"
+											rows={9}
+											placeholder={'Petite description'}
 											value={field.value ?? ''}
 										/>
 									</FormControl>
@@ -308,7 +313,7 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 											disable={loading}
 											onChange={(url) => field.onChange(url)}
 											onRemove={() => field.onChange('')}
-											localisation='vervel_moto_piece/about'
+											localisation="vervel_moto_piece/about"
 										/>
 									</FormControl>
 									<FormMessage />
@@ -326,10 +331,11 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 								<FormItem>
 									<FormLabel>Vos motivations perso </FormLabel>
 									<FormControl>
-										<Input
+										<Textarea
 											disabled={loading}
-											placeholder="Je fais ceci car ..."
-											{...field}
+											className="Les différents types de produit & en quoi vous êtes différents"
+											rows={9}
+											placeholder={'Je fais ceci car ...'}
 											value={field.value ?? ''}
 										/>
 									</FormControl>
@@ -349,7 +355,7 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 											disable={loading}
 											onChange={(url) => field.onChange(url)}
 											onRemove={() => field.onChange('')}
-											localisation='vervel_moto_piece/about'
+											localisation="vervel_moto_piece/about"
 										/>
 									</FormControl>
 									<FormMessage />
@@ -367,10 +373,11 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 								<FormItem>
 									<FormLabel>Mise en avnt </FormLabel>
 									<FormControl>
-										<Input
+										<Textarea
 											disabled={loading}
-											placeholder="Le truc de ouf"
-											{...field}
+											className="Les différents types de produit & en quoi vous êtes différents"
+											rows={9}
+											placeholder={'Le truc de ouf'}
 											value={field.value ?? ''}
 										/>
 									</FormControl>
@@ -390,7 +397,7 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 											disable={loading}
 											onChange={(url) => field.onChange(url)}
 											onRemove={() => field.onChange('')}
-											localisation='vervel_moto_piece/about'
+											localisation="vervel_moto_piece/about"
 										/>
 									</FormControl>
 									<FormMessage />
@@ -408,10 +415,11 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 								<FormItem>
 									<FormLabel>Vos valeurs perso </FormLabel>
 									<FormControl>
-										<Input
+										<Textarea
 											disabled={loading}
-											placeholder="Je fais ceci car ..."
-											{...field}
+											className="Je fais ceci car ..."
+											rows={9}
+											placeholder={'Le truc de ouf'}
 											value={field.value ?? ''}
 										/>
 									</FormControl>
@@ -431,7 +439,7 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 											disable={loading}
 											onChange={(url) => field.onChange(url)}
 											onRemove={() => field.onChange('')}
-											localisation='vervel_moto_piece/about'
+											localisation="vervel_moto_piece/about"
 										/>
 									</FormControl>
 									<FormMessage />
