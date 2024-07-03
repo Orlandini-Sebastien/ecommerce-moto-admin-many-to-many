@@ -152,7 +152,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ initalData }) => {
 							name="imageURL"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Photo de profil</FormLabel>
+									<FormLabel>Photo de profil / Avatar</FormLabel>
 									<FormControl>
 										<ImageUpload
 											value={field.value ? [field.value] : []}
@@ -193,7 +193,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ initalData }) => {
 							name="name"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Nom de famille</FormLabel>
+									<FormLabel>Nom de famille / entreprise</FormLabel>
 									<FormControl>
 										<Input
 											disabled={loading}
@@ -211,7 +211,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ initalData }) => {
 							name="firstname"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Prénom</FormLabel>
+									<FormLabel>Prénom / Slogan</FormLabel>
 									<FormControl>
 										<Input
 											disabled={loading}
