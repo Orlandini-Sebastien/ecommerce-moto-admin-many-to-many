@@ -108,7 +108,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({ initalData }) => {
 	// --------------------------------
 
 	return (
-		<div className='space-y-4'>
+		<div className="space-y-4">
 			<AlertModal
 				isOpen={open}
 				onClose={() => setOpen(false)}
@@ -146,7 +146,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({ initalData }) => {
 										disable={loading}
 										onChange={(url) => field.onChange(url)}
 										onRemove={() => field.onChange('')}
-										localisation='vervel_moto_piece/billboard'
+										localisation="vervel_moto_piece-2/billboard"
 									/>
 								</FormControl>
 								<FormMessage />

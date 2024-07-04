@@ -188,7 +188,7 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 											disable={loading}
 											onChange={(url) => field.onChange(url)}
 											onRemove={() => field.onChange('')}
-											localisation="vervel_moto_piece/about"
+											localisation="vervel_moto_piece-2/about"
 										/>
 									</FormControl>
 									<FormMessage />
@@ -230,7 +230,7 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 											disable={loading}
 											onChange={(url) => field.onChange(url)}
 											onRemove={() => field.onChange('')}
-											localisation="vervel_moto_piece/about"
+											localisation="vervel_moto_piece-2/about"
 										/>
 									</FormControl>
 									<FormMessage />
@@ -272,7 +272,7 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 											disable={loading}
 											onChange={(url) => field.onChange(url)}
 											onRemove={() => field.onChange('')}
-											localisation="vervel_moto_piece/about"
+											localisation="vervel_moto_piece-2/about"
 										/>
 									</FormControl>
 									<FormMessage />
@@ -313,7 +313,7 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 											disable={loading}
 											onChange={(url) => field.onChange(url)}
 											onRemove={() => field.onChange('')}
-											localisation="vervel_moto_piece/about"
+											localisation="vervel_moto_piece-2/about"
 										/>
 									</FormControl>
 									<FormMessage />
@@ -355,7 +355,7 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 											disable={loading}
 											onChange={(url) => field.onChange(url)}
 											onRemove={() => field.onChange('')}
-											localisation="vervel_moto_piece/about"
+											localisation="vervel_moto_piece-2/about"
 										/>
 									</FormControl>
 									<FormMessage />
@@ -397,7 +397,7 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 											disable={loading}
 											onChange={(url) => field.onChange(url)}
 											onRemove={() => field.onChange('')}
-											localisation="vervel_moto_piece/about"
+											localisation="vervel_moto_piece-2/about"
 										/>
 									</FormControl>
 									<FormMessage />
@@ -439,7 +439,7 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 											disable={loading}
 											onChange={(url) => field.onChange(url)}
 											onRemove={() => field.onChange('')}
-											localisation="vervel_moto_piece/about"
+											localisation="vervel_moto_piece-2/about"
 										/>
 									</FormControl>
 									<FormMessage />

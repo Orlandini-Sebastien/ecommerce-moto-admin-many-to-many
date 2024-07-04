@@ -206,7 +206,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 												...field.value.filter((current) => current.url !== url),
 											])
 										}
-										localisation="vervel_moto_piece/product"
+										localisation="vervel_moto_piece-2/product"
 									/>
 								</FormControl>
 								<FormMessage />
@@ -389,31 +389,30 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 								</FormItem>
 							)}
 						/>
-					
 					</div>
 					<FormField
-							control={form.control}
-							name="description"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Description</FormLabel>
-									<FormControl>
-										<Textarea
-											className="bg-background resize-none"
-											rows={7}
-											placeholder={'Décrire votre produit si besoin'}
-											{...field}
-										/>
-									</FormControl>
-									<FormDescription>
-										{
-											'Ajouter les détails pertinents pour la vente de votre produit'
-										}
-									</FormDescription>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
+						control={form.control}
+						name="description"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Description</FormLabel>
+								<FormControl>
+									<Textarea
+										className="bg-background resize-none"
+										rows={7}
+										placeholder={'Décrire votre produit si besoin'}
+										{...field}
+									/>
+								</FormControl>
+								<FormDescription>
+									{
+										'Ajouter les détails pertinents pour la vente de votre produit'
+									}
+								</FormDescription>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
 					<Button disabled={loading} className="ml-auto" type="submit">
 						{action}
 					</Button>
