@@ -3,6 +3,15 @@ import { auth } from '@clerk/nextjs/server'; // Notez l'utilisation de /server
 
 import prismadb from '@/lib/prismadb';
 
+function separateCategoryIds(categoryId: string) {
+	// Supprimer les espaces blancs en début et fin de la chaîne, puis séparer par virgule
+	return categoryId
+		.trim()
+		.split(',')
+		.map((id) => id.trim())
+		.filter((id) => id !== '');
+}
+
 export async function POST(
 	req: Request,
 	{ params }: { params: { storeId: string } }
@@ -23,7 +32,7 @@ export async function POST(
 
 			sizeId,
 			colorId,
-			description
+			description,
 		} = body;
 
 		if (!userId) {
@@ -44,12 +53,10 @@ export async function POST(
 		if (!categoryId) {
 			return new NextResponse('Category id is required', { status: 400 });
 		}
-		// if (!sizeId) {
-		// 	return new NextResponse('Size id is required', { status: 400 });
-		// }
-		// if (!colorId) {
-		// 	return new NextResponse('Color id is required', { status: 400 });
-		// }
+
+		//Conversion de la chaine string de id en un tableau
+
+		const separatedCategoryIds = separateCategoryIds(categoryId);
 
 		if (!params.storeId) {
 			return new NextResponse('Store id is required', { status: 400 });
@@ -78,8 +85,6 @@ export async function POST(
 						data: [...images.map((image: { url: string }) => image)],
 					},
 				},
-				categoryId,
-
 				price,
 				isFeatured,
 				isArchived,
@@ -88,6 +93,13 @@ export async function POST(
 				...(sizeId && { sizeId }),
 				...(description && { description }),
 			},
+		});
+
+		const productCategories = await prismadb.productCategory.createMany({
+			data: separatedCategoryIds.map((categoryId) => ({
+				productId: product.id,
+				categoryId: categoryId,
+			})),
 		});
 
 		return NextResponse.json(product);
@@ -108,7 +120,7 @@ export async function GET(
 	try {
 		const { searchParams } = new URL(req.url);
 
-		const categoryId = searchParams.get('categoryId') || undefined;
+		const categories = searchParams.get('categories') || undefined;
 		const colorId = searchParams.get('colorId') || undefined;
 		const sizeId = searchParams.get('sizeId') || undefined;
 		const isFeatured = searchParams.get('isFeatured');
@@ -120,7 +132,6 @@ export async function GET(
 		const products = await prismadb.product.findMany({
 			where: {
 				storeId: params.storeId,
-				categoryId,
 				colorId,
 				sizeId,
 				isFeatured: isFeatured ? true : undefined,
@@ -128,7 +139,7 @@ export async function GET(
 			},
 			include: {
 				images: true,
-				category: true,
+				categories: true,
 				color: true,
 				size: true,
 			},

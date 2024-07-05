@@ -35,10 +35,7 @@ model Store {
 
 model Billboard {
   id         String     @id @default(uuid())
-  //  le Billboard existe que dans un store specifique
   storeId    String
-  // Relation entre le store et le billboard et la relation doit aussi etre dans le Store model
-  // id est le id du Store dans la référence
   store      Store      @relation("StoreToBillboard", fields: [storeId], references: [id])
   label      String
   imageURL   String
@@ -46,20 +43,19 @@ model Billboard {
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt()
 
-  // A rajouter sinon la relation store donne une erreur
   @@index([storeId])
 }
 
 model Category {
-  id          String    @id @default(uuid())
+  id          String            @id @default(uuid())
   storeId     String
-  store       Store     @relation("StoreToCategory", fields: [storeId], references: [id])
+  store       Store             @relation("StoreToCategory", fields: [storeId], references: [id])
   billboardId String
-  billboard   Billboard @relation(fields: [billboardId], references: [id])
-  porduct     Product[] @relation("CategoryToProduct")
   name        String
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  billboard   Billboard         @relation(fields: [billboardId], references: [id])
+  products    ProductCategory[]
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
 
   @@index([storeId])
   @@index([billboardId])
@@ -92,42 +88,49 @@ model Color {
 }
 
 model Product {
-  id          String      @id @default(uuid())
-  storeId     String
-  store       Store       @relation("StoreToProduct", fields: [storeId], references: [id])
-  categoryId  String
-  category    Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
-  name        String
-  price       Decimal
-  isFeatured  Boolean     @default(false)
-  isArchived  Boolean     @default(false)
-  images      Image[]
-  orderItems  OrderItem[]
+  id         String            @id @default(uuid())
+  storeId    String
+  store      Store             @relation("StoreToProduct", fields: [storeId], references: [id])
+  categories ProductCategory[]
+  name       String
+  price      Float
+  isFeatured Boolean           @default(false)
+  isArchived Boolean           @default(false)
+  images     Image[]
+  orderItems OrderItem[]
 
   description String?
-  sizeId  String?
-  size    Size?   @relation(fields: [sizeId], references: [id])
-  colorId String?
-  color   Color?  @relation(fields: [colorId], references: [id])
+  sizeId      String?
+  size        Size?   @relation(fields: [sizeId], references: [id])
+  colorId     String?
+  color       Color?  @relation(fields: [colorId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([storeId])
-  @@index([categoryId])
   @@index([colorId])
   @@index([sizeId])
 }
 
-//Pour les images multiples dans le product
+model ProductCategory {
+  productId  String
+  categoryId String
+  product    Product  @relation(fields: [productId], references: [id])
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  @@id([productId, categoryId])
+  @@index([productId])
+  @@index([categoryId])
+}
+
 model Image {
   id        String   @id @default(uuid())
   productId String
-  // onDelete Cascade permet de supprimer les images lors de la suppression du produit
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   url       String
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now())
 
   @@index([productId])
 }
@@ -141,7 +144,7 @@ model Order {
   phone      String      @default("")
   address    String      @default("")
   createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
+  updatedAt  DateTime    @default(now())
 
   @@index([storeId])
 }
@@ -173,7 +176,7 @@ model Contact {
   imageURLPlace String @default("") // Prendre en photo le lieu du magasin
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now())
 
   @@index([storeId])
 }
@@ -185,7 +188,7 @@ model Review {
   source    String
   link      String
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now())
 
   @@index([storeId])
 }
@@ -197,7 +200,7 @@ model Question {
   question  String
   answer    String
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now())
 
   @@index([storeId])
 }

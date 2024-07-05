@@ -14,7 +14,9 @@ const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
 		},
 		//On polulate
 		include: {
-			category: true,
+			categories: {
+				include: { category: true },
+			},
 			size: true,
 			color: true,
 		},
@@ -24,17 +26,28 @@ const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
 		},
 	});
 
-	const formattedProducts: ProductColumn[] = products.map((item) => ({
-		id: item.id,
-		name: item.name,
-		isFeatured: item.isFeatured,
-		isArchived: item.isArchived,
-		price: formatter.format(item.price.toNumber()),
-		category: item.category.name,
-		size: item?.size?.name,
-		color: item?.color?.value,
-		createdAt: format(item.createdAt, 'MMMM do, yyyy'),
-	}));
+	console.log('products >>>>>>>>>>', products);
+
+	const formattedProducts: ProductColumn[] = products.map((item) => {
+		const categories = item.categories.map((cat) => ({
+			id: cat.category.id,
+			name: cat.category.name,
+		}));
+
+		return {
+			id: item.id,
+			name: item.name,
+			isFeatured: item.isFeatured,
+			isArchived: item.isArchived,
+			price: formatter.format(item.price),
+			categories: categories,
+			size: item?.size?.name,
+			color: item?.color?.value,
+			createdAt: format(item.createdAt, 'MMMM do, yyyy'),
+		};
+	});
+
+	console.log('formatted >>>>>', formattedProducts);
 
 	return (
 		<div className="flex-col">

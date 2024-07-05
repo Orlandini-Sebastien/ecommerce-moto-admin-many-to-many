@@ -3,11 +3,12 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { CellAction } from './cell-action';
 
+
 export type ProductColumn = {
 	id: string;
 	name: string;
 	price: string;
-	category: string;
+	categories: { id: string; name: string }[];
 	isFeatured: boolean;
 	isArchived: boolean;
 	createdAt: string;
@@ -33,8 +34,8 @@ export const columns: ColumnDef<ProductColumn>[] = [
 		header: 'Prix',
 	},
 	{
-		accessorKey: 'category',
-		header: 'Catégorie',
+		accessorKey: 'categories',
+		header: 'Catégories',
 	},
 	{
 		accessorKey: 'size',
@@ -67,5 +68,3 @@ export const columns: ColumnDef<ProductColumn>[] = [
 		cell: ({ row }) => <CellAction data={row.original} />,
 	},
 ];
-
-

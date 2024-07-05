@@ -5,7 +5,7 @@ import { Category, Color, Image, Product, Size } from '@prisma/client';
 import { Trash } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { useParams, useRouter } from 'next/navigation';
@@ -73,12 +73,17 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 	colors,
 	sizes,
 }) => {
+	console.log('initialData >>>>>>>>>', initalData);
+
 	const params = useParams();
 	const router = useRouter();
 
 	const [open, setOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
 
+	const [selectedCategoryNames, setSelectedCategoryNames] = useState('');
+	const [selectedCategoryIds, setSelectedCategoryIds] = useState('');
+	console.log('initialData >>>>', initalData);
 	const title = initalData ? 'Editer un produit' : 'Créer un produit';
 	const description = initalData
 		? 'Editer une description'
@@ -89,6 +94,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 	//utilisation de zod pour le form
 	const form = useForm<ProductFormValues>({
 		resolver: zodResolver(formSchema),
+
 		// comme on a un float, et que dans prisma et la database non
 		defaultValues: initalData
 			? {
@@ -112,6 +118,11 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 			  },
 	});
 	// --------------------------------
+
+	// Assurez-vous que le categoryId est mis à jour avant la soumission
+	useEffect(() => {
+		form.setValue('categoryId', selectedCategoryIds);
+	}, [selectedCategoryIds, form]);
 
 	// creation du form
 	const onSubmit = async (data: ProductFormValues) => {
@@ -161,6 +172,29 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 	};
 	// --------------------------------
 
+	// Fonction pour gérer le changement des checkboxes
+	const handleCheckboxChange = (categoryName: string, categoryId: string) => {
+		setSelectedCategoryNames((prevSelectedNames) => {
+			if (prevSelectedNames.includes(categoryName)) {
+				// Si la catégorie est déjà sélectionnée, on la retire des noms
+				return prevSelectedNames.replace(`${categoryName}, `, '');
+			} else {
+				// Sinon, on l'ajoute aux noms
+				return prevSelectedNames + `${categoryName}, `;
+			}
+		});
+
+		setSelectedCategoryIds((prevSelectedIds) => {
+			if (prevSelectedIds.includes(categoryId)) {
+				// Si la catégorie est déjà sélectionnée, on la retire des identifiants
+				return prevSelectedIds.replace(`${categoryId}, `, '');
+			} else {
+				// Sinon, on l'ajoute aux identifiants
+				return prevSelectedIds + `${categoryId}, `;
+			}
+		});
+	};
+
 	return (
 		<>
 			<AlertModal
@@ -182,6 +216,28 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 					</Button>
 				)}
 			</div>
+			<Separator />
+			<div>
+				{categories.map((category) => (
+					<div key={category.id}>
+						<input
+							type="checkbox"
+							checked={selectedCategoryNames.includes(category.name)}
+							onChange={() => handleCheckboxChange(category.name, category.id)}
+						/>
+						{category.name}
+					</div>
+				))}
+				<div>
+					Chaîne de caractères des noms de catégories sélectionnées :{' '}
+					{selectedCategoryNames}
+				</div>
+				<div>
+					Chaîne de caractères des identifiants de catégories sélectionnées :{' '}
+					{selectedCategoryIds}
+				</div>
+			</div>
+
 			<Separator />
 			<Form {...form}>
 				<form
@@ -254,29 +310,18 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 							name="categoryId"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Catégorie</FormLabel>
-									<Select
-										disabled={loading}
-										onValueChange={field.onChange}
-										value={field.value}
-										defaultValue={field.value}
-									>
-										<FormControl>
-											<SelectTrigger>
-												<SelectValue
-													defaultValue={field.value}
-													placeholder="Choisir une catégorie"
-												/>
-											</SelectTrigger>
-										</FormControl>
-										<SelectContent>
-											{categories.map((category) => (
-												<SelectItem key={category.id} value={category.id}>
-													{category.name}
-												</SelectItem>
-											))}
-										</SelectContent>
-									</Select>
+									<FormLabel>Catégorie(s)</FormLabel>
+									<FormControl>
+										<Input
+											disabled={loading}
+											value={selectedCategoryIds}
+											readOnly
+											onBlur={field.onBlur}
+											name={field.name}
+											ref={field.ref}
+											onChange={field.onChange}
+										/>
+									</FormControl>
 									<FormMessage />
 								</FormItem>
 							)}

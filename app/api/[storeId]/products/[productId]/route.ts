@@ -18,7 +18,7 @@ export async function GET(
 			},
 			include: {
 				images: true,
-				category: true,
+				categories: true,
 				size: true,
 				color: true,
 			},
@@ -46,7 +46,7 @@ export async function PATCH(
 			images,
 			isFeatured,
 			isArchived,
-			description
+			description,
 		} = body;
 
 		if (!userId) {
@@ -94,7 +94,7 @@ export async function PATCH(
 			data: {
 				name,
 				price,
-				categoryId,
+
 				colorId,
 				sizeId,
 				description,
