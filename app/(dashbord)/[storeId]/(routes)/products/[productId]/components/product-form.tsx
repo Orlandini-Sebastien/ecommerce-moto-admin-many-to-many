@@ -117,7 +117,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 			: {
 					name: '',
 					images: [],
-					price: 0,
+
 					categoryId: '',
 					isFeatured: false,
 					isArchived: false,
@@ -300,7 +300,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 										<Input
 											type="number"
 											disabled={loading}
-											placeholder="9.99"
+											placeholder="Ajoute le prix"
 											{...field}
 										/>
 									</FormControl>
@@ -373,7 +373,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 																			/>
 																		) : null}
 																	</div>
-																	<span className={`font-medium text-muted-foreground`}>
+																	<span
+																		className={`font-medium text-muted-foreground`}
+																	>
 																		{category.name}
 																	</span>
 																</label>

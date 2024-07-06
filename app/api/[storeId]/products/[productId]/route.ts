@@ -78,8 +78,7 @@ export async function PATCH(
 
 		const separatedCategoryIds = separateCategoryIds(categoryId);
 
-		console.log("array >>>>>>>>>>",separateCategoryIds);
-		
+		console.log('array >>>>>>>>>>', separateCategoryIds);
 
 		if (!params.productId) {
 			return new NextResponse('Product id is required', { status: 400 });
@@ -140,6 +139,52 @@ export async function PATCH(
 		return NextResponse.json(updatedProduct);
 	} catch (error) {
 		console.log('[PRODUCT_PATCH]', error);
+		return new NextResponse('Internal error', { status: 500 });
+	}
+}
+
+export async function DELETE(
+	req: Request, // Même inutiliser on doit le garder tout de même
+	{ params }: { params: { storeId: string; productId: string } }
+) {
+	try {
+		const { userId } = auth();
+
+		if (!userId) {
+			return new NextResponse('Unauthenticated', { status: 401 });
+		}
+
+		if (!params.productId) {
+			return new NextResponse('Product id is required', { status: 400 });
+		}
+
+		// Verification si le storeId existe pour le user
+		// Le user peut aller que sur son store et pas sur les autre d'autre user
+		const storeByUserId = await prismadb.store.findFirst({
+			where: {
+				id: params.storeId,
+				userId,
+			},
+		});
+		if (!storeByUserId) {
+			return new NextResponse('Unauthorized', { status: 403 });
+		}
+		// -------------------------------------------
+
+		// Supprimer les entrées dans la table de jointure
+		const deleteProductCategories = await prismadb.productCategory.deleteMany({
+			where: {
+				productId: params.productId,
+			},
+		});
+		const product = await prismadb.product.deleteMany({
+			where: {
+				id: params.productId,
+			},
+		});
+		return NextResponse.json(product);
+	} catch (error) {
+		console.log('[PRODUCT_DELETE]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }
