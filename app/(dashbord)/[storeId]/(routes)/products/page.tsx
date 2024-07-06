@@ -26,7 +26,7 @@ const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
 		},
 	});
 
-	console.log('products >>>>>>>>>>', products);
+
 
 	const formattedProducts: ProductColumn[] = products.map((item) => {
 		const categories = item.categories.map((cat) => ({
@@ -47,7 +47,7 @@ const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
 		};
 	});
 
-	console.log('formatted >>>>>', formattedProducts);
+
 
 	return (
 		<div className="flex-col">

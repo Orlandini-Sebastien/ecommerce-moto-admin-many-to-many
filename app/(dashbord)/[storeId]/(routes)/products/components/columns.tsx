@@ -3,7 +3,6 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { CellAction } from './cell-action';
 
-
 export type ProductColumn = {
 	id: string;
 	name: string;
@@ -36,6 +35,14 @@ export const columns: ColumnDef<ProductColumn>[] = [
 	{
 		accessorKey: 'categories',
 		header: 'Catégories',
+		cell: ({ row }) =>
+			row.original.categories && (
+				<div>
+					{row.original.categories.map((cat) => (
+						<div key={cat.id}>{cat.name}</div>
+					))}
+				</div>
+			),
 	},
 	{
 		accessorKey: 'size',

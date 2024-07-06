@@ -1,8 +1,15 @@
 'use client';
 
 import * as z from 'zod';
-import { Category, Color, Image, Product, Size } from '@prisma/client';
-import { Trash } from 'lucide-react';
+import {
+	Category,
+	Color,
+	Image,
+	Product,
+	ProductCategory,
+	Size,
+} from '@prisma/client';
+import { Check, Trash } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
@@ -35,6 +42,8 @@ import {
 } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
+import { cn } from '@/lib/utils';
+import { useTheme } from 'next-themes';
 
 //Creation du schema avec zod
 const formSchema = z.object({
@@ -58,51 +67,52 @@ type ProductFormValues = z.infer<typeof formSchema>;
 // ---------------------------
 
 interface ProductFormProps {
-	initalData:
-		| (Product & {
-				images: Image[];
-		  })
+	initialData:
+		| (Product & { images: Image[] } & { categories: ProductCategory[] })
 		| null;
 	categories: Category[];
 	colors: Color[];
 	sizes: Size[];
 }
 export const ProductForm: React.FC<ProductFormProps> = ({
-	initalData,
+	initialData,
 	categories,
 	colors,
 	sizes,
 }) => {
-	console.log('initialData >>>>>>>>>', initalData);
-
 	const params = useParams();
 	const router = useRouter();
+	const mode = useTheme();
 
 	const [open, setOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
 
-	const [selectedCategoryNames, setSelectedCategoryNames] = useState('');
-	const [selectedCategoryIds, setSelectedCategoryIds] = useState('');
-	console.log('initialData >>>>', initalData);
-	const title = initalData ? 'Editer un produit' : 'Créer un produit';
-	const description = initalData
+	const [selectedCategoryNames, setSelectedCategoryNames] = useState<string[]>(
+		[]
+	);
+	const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>([]);
+	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+	const title = initialData ? 'Editer un produit' : 'Créer un produit';
+	const description = initialData
 		? 'Editer une description'
 		: 'Ajouter une description';
-	const toastMessage = initalData ? 'Produit modifié.' : 'Produit créé.';
-	const action = initalData ? 'Sauvegarder' : 'Créer';
+	const toastMessage = initialData ? 'Produit modifié.' : 'Produit créé.';
+	const action = initialData ? 'Sauvegarder' : 'Créer';
 
 	//utilisation de zod pour le form
 	const form = useForm<ProductFormValues>({
 		resolver: zodResolver(formSchema),
 
 		// comme on a un float, et que dans prisma et la database non
-		defaultValues: initalData
+		defaultValues: initialData
 			? {
-					...initalData,
-					price: parseFloat(String(initalData?.price)),
-					colorId: initalData.colorId ?? undefined,
-					sizeId: initalData.sizeId ?? undefined,
-					description: initalData.description ?? undefined,
+					...initialData,
+					price: parseFloat(String(initialData?.price)),
+					colorId: initialData.colorId ?? undefined,
+					sizeId: initialData.sizeId ?? undefined,
+					description: initialData.description ?? undefined,
+					categoryId: categories.map((cat) => cat.name).toString(),
 			  }
 			: {
 					name: '',
@@ -119,16 +129,30 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 	});
 	// --------------------------------
 
-	// Assurez-vous que le categoryId est mis à jour avant la soumission
+	// Mise à jour des catégories sélectionnées initiales une fois
 	useEffect(() => {
-		form.setValue('categoryId', selectedCategoryIds);
+		if (initialData?.categories) {
+			const initialCategoryIds = initialData.categories.map(
+				(cat) => cat.categoryId
+			);
+			const initialCategoryNames = categories
+				.filter((cat) => initialCategoryIds.includes(cat.id))
+				.map((cat) => cat.name);
+
+			setSelectedCategoryIds(initialCategoryIds);
+			setSelectedCategoryNames(initialCategoryNames);
+		}
+	}, [initialData, categories]);
+
+	useEffect(() => {
+		form.setValue('categoryId', selectedCategoryIds.join(', '));
 	}, [selectedCategoryIds, form]);
 
 	// creation du form
 	const onSubmit = async (data: ProductFormValues) => {
 		try {
 			setLoading(true);
-			if (initalData) {
+			if (initialData) {
 				await axios.patch(
 					`/api/${params.storeId}/products/${params.productId}`,
 					data
@@ -177,20 +201,20 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 		setSelectedCategoryNames((prevSelectedNames) => {
 			if (prevSelectedNames.includes(categoryName)) {
 				// Si la catégorie est déjà sélectionnée, on la retire des noms
-				return prevSelectedNames.replace(`${categoryName}, `, '');
+				return prevSelectedNames.filter((name) => name !== categoryName);
 			} else {
 				// Sinon, on l'ajoute aux noms
-				return prevSelectedNames + `${categoryName}, `;
+				return [...prevSelectedNames, categoryName];
 			}
 		});
 
 		setSelectedCategoryIds((prevSelectedIds) => {
 			if (prevSelectedIds.includes(categoryId)) {
 				// Si la catégorie est déjà sélectionnée, on la retire des identifiants
-				return prevSelectedIds.replace(`${categoryId}, `, '');
+				return prevSelectedIds.filter((id) => id !== categoryId);
 			} else {
 				// Sinon, on l'ajoute aux identifiants
-				return prevSelectedIds + `${categoryId}, `;
+				return [...prevSelectedIds, categoryId];
 			}
 		});
 	};
@@ -205,7 +229,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 			/>
 			<div className="flex items-center justify-between">
 				<Heading title={title} description={description} />
-				{initalData && (
+				{initialData && (
 					<Button
 						disabled={loading}
 						variant={'destructive'}
@@ -215,27 +239,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 						<Trash className="h-4 w-4" />
 					</Button>
 				)}
-			</div>
-			<Separator />
-			<div>
-				{categories.map((category) => (
-					<div key={category.id}>
-						<input
-							type="checkbox"
-							checked={selectedCategoryNames.includes(category.name)}
-							onChange={() => handleCheckboxChange(category.name, category.id)}
-						/>
-						{category.name}
-					</div>
-				))}
-				<div>
-					Chaîne de caractères des noms de catégories sélectionnées :{' '}
-					{selectedCategoryNames}
-				</div>
-				<div>
-					Chaîne de caractères des identifiants de catégories sélectionnées :{' '}
-					{selectedCategoryIds}
-				</div>
 			</div>
 
 			<Separator />
@@ -309,10 +312,92 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 							control={form.control}
 							name="categoryId"
 							render={({ field }) => (
-								<FormItem>
+								<FormItem className="flex flex-col gap-2">
 									<FormLabel>Catégorie(s)</FormLabel>
+									<div className="relative inline-block text-left gap-2">
+										<div className="text-sm font-medium overflow-y-auto h-20 border rounded-lg p-2 mb-2 ">
+											{selectedCategoryNames.join(', ')}
+										</div>
+
+										<Button
+											variant={'secondary'}
+											type={'button'}
+											onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+										>
+											Selectionne une catégorie
+										</Button>
+
+										{isDropdownOpen && (
+											<div className="absolute mt-2 rounded-md shadow-lg bg-primary-foreground ring-1 ring-black ring-opacity-5 z-10">
+												<div
+													className="py-1"
+													role="menu"
+													aria-orientation="vertical"
+													aria-labelledby="options-menu"
+												>
+													{categories.map((category) => (
+														<div className="flex flex-col gap-1 p-2">
+															<div
+																className="flex gap-1 items-center "
+																key={category.id}
+															>
+																<input
+																	className="hidden"
+																	id={'input' + category.id}
+																	type="checkbox"
+																	checked={selectedCategoryNames.includes(
+																		category.name
+																	)}
+																	onChange={() =>
+																		handleCheckboxChange(
+																			category.name,
+																			category.id
+																		)
+																	}
+																/>
+																<label
+																	htmlFor={'input' + category.id}
+																	className="flex gap-2 text-sm font-medium text-muted-foreground"
+																>
+																	<div
+																		className={`flex justify-center items-center peer h-4 w-4 
+																	shrink-0 rounded-sm border border-muted-foreground ring-offset-background
+																	  disabled:cursor-not-allowed disabled:opacity-50 
+																	`}
+																	>
+																		{selectedCategoryNames.includes(
+																			category.name
+																		) ? (
+																			<Check
+																				className={`font-medium text-muted-foreground`}
+																			/>
+																		) : null}
+																	</div>
+																	<span className={`font-medium text-muted-foreground`}>
+																		{category.name}
+																	</span>
+																</label>
+															</div>
+														</div>
+													))}
+												</div>
+											</div>
+										)}
+
+										{/* <div className="mt-2">
+											<div>
+												Chaîne de caractères des noms de catégories
+												sélectionnées : {selectedCategoryNames.join(', ')}
+											</div>
+											<div>
+												Chaîne de caractères des identifiants de catégories
+												sélectionnées : {selectedCategoryIds.join(', ')}
+											</div>
+										</div> */}
+									</div>
 									<FormControl>
 										<Input
+											className="invisible"
 											disabled={loading}
 											value={selectedCategoryIds}
 											readOnly

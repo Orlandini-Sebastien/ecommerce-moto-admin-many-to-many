@@ -119,8 +119,6 @@ export async function GET(
 ) {
 	try {
 		const { searchParams } = new URL(req.url);
-
-		const categories = searchParams.get('categories') || undefined;
 		const colorId = searchParams.get('colorId') || undefined;
 		const sizeId = searchParams.get('sizeId') || undefined;
 		const isFeatured = searchParams.get('isFeatured');

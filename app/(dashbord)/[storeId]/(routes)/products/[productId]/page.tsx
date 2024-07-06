@@ -14,6 +14,7 @@ const ProductPage = async ({
 		},
 		include: {
 			images: true,
+			categories:true
 		},
 	});
 
@@ -34,7 +35,7 @@ const ProductPage = async ({
 		},
 	});
 
-	console.log('produit >>>>', product);
+
 
 	return (
 		<div className="flex-col">
@@ -43,7 +44,7 @@ const ProductPage = async ({
 					categories={categories}
 					colors={colors}
 					sizes={sizes}
-					initalData={product}
+					initialData={product}
 				/>
 			</div>
 		</div>
