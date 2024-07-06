@@ -51,7 +51,7 @@ const formSchema = z.object({
 	categoryId: z.string().min(1),
 	colorId: z.string().min(1).optional(),
 	sizeId: z.string().min(1).optional(),
-	stock: z.number().min(1).optional(),
+	stock: z.coerce.number().min(1).optional(),
 	price: z.coerce.number().min(1),
 	isFeatured: z.boolean().default(false).optional(),
 	isArchived: z.boolean().default(false).optional(),
@@ -107,7 +107,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 			? {
 					...initialData,
 					price: parseFloat(String(initialData?.price)),
-					stock: parseInt(String(initialData.stock)),
+					stock: parseInt(String(initialData?.stock)) | 1,
 					colorId: initialData.colorId ?? undefined,
 					sizeId: initialData.sizeId ?? undefined,
 					description: initialData.description ?? undefined,
