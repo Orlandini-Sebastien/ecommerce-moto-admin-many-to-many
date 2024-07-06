@@ -18,7 +18,7 @@ export async function POST(req: Request) {
 			process.env.STRIPE_WEBHOOK_SECRET!
 		);
 		// !!!!!!!!!!!!!!!! attention ici c'est error:any a chaque fois que je sauvegarde cela me met une erreur
-	} catch (error:any) {
+	} catch (error : any) {
 		return new NextResponse(`Webhook Error: ${error.message}`, { status: 400 });
 	}
 
@@ -53,16 +53,44 @@ export async function POST(req: Request) {
 
 		const productIds = order.orderItems.map((orderItem) => orderItem.productId);
 
-		await prismadb.product.updateMany({
+		// Get current stock for each product
+		const products = await prismadb.product.findMany({
 			where: {
 				id: {
 					in: [...productIds],
 				},
 			},
-			data: {
-				isArchived: true,
+			select: {
+				id: true,
+				stock: true,
 			},
 		});
+
+		const updates = products.map((product) => {
+			if (product.stock) {
+				const newStock = product.stock - 1;
+				return prismadb.product.update({
+					where: {
+						id: product.id,
+					},
+					data: {
+						stock: newStock,
+						isArchived: newStock <= 0,
+					},
+				});
+			} else {
+				return prismadb.product.update({
+					where: {
+						id: product.id,
+					},
+					data: {
+						isArchived: true,
+					},
+				});
+			}
+		});
+
+		await Promise.all(updates);
 	}
 	return new NextResponse(null, { status: 200 });
 }

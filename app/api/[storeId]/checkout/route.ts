@@ -18,19 +18,12 @@ export async function POST(
 	req: Request,
 	{ params }: { params: { storeId: string } }
 ) {
-	// // Ensure the CORS headers are set for the response
-	// const responseHeaders = {
-	// 	...corsHeaders,
-	// 	'Content-Type': 'application/json',
-	// };
-
 	try {
 		const { productIds } = await req.json();
 
 		if (!productIds || productIds.length === 0) {
 			return new NextResponse('Product ids are required', {
 				status: 400,
-				// headers: responseHeaders,
 			});
 		}
 		const products = await prismadb.product.findMany({
@@ -51,7 +44,7 @@ export async function POST(
 					product_data: {
 						name: product.name,
 					},
-					unit_amount: product.price.toNumber() * 100,
+					unit_amount: product.price * 100,
 				},
 			});
 		});
@@ -86,10 +79,7 @@ export async function POST(
 			},
 		});
 
-		return NextResponse.json(
-			{ url: session.url },
-			{ headers: corsHeaders }
-		);
+		return NextResponse.json({ url: session.url }, { headers: corsHeaders });
 	} catch (error) {
 		console.error(error);
 		return new NextResponse('Internal Server Error', {
