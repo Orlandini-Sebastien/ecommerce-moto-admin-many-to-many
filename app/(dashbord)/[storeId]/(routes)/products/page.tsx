@@ -26,8 +26,6 @@ const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
 		},
 	});
 
-
-
 	const formattedProducts: ProductColumn[] = products.map((item) => {
 		const categories = item.categories.map((cat) => ({
 			id: cat.category.id,
@@ -39,6 +37,7 @@ const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
 			name: item.name,
 			isFeatured: item.isFeatured,
 			isArchived: item.isArchived,
+			stock: item.stock,
 			price: formatter.format(item.price),
 			categories: categories,
 			size: item?.size?.name,
@@ -46,8 +45,6 @@ const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
 			createdAt: format(item.createdAt, 'MMMM do, yyyy'),
 		};
 	});
-
-
 
 	return (
 		<div className="flex-col">

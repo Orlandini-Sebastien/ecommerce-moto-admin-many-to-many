@@ -42,8 +42,6 @@ import {
 } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
-import { cn } from '@/lib/utils';
-import { useTheme } from 'next-themes';
 
 //Creation du schema avec zod
 const formSchema = z.object({
@@ -53,6 +51,7 @@ const formSchema = z.object({
 	categoryId: z.string().min(1),
 	colorId: z.string().min(1).optional(),
 	sizeId: z.string().min(1).optional(),
+	stock: z.number().min(1).optional(),
 	price: z.coerce.number().min(1),
 	isFeatured: z.boolean().default(false).optional(),
 	isArchived: z.boolean().default(false).optional(),
@@ -82,7 +81,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 }) => {
 	const params = useParams();
 	const router = useRouter();
-	const mode = useTheme();
 
 	const [open, setOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
@@ -109,6 +107,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 			? {
 					...initialData,
 					price: parseFloat(String(initialData?.price)),
+					stock: parseInt(String(initialData.stock)),
 					colorId: initialData.colorId ?? undefined,
 					sizeId: initialData.sizeId ?? undefined,
 					description: initialData.description ?? undefined,
@@ -117,11 +116,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 			: {
 					name: '',
 					images: [],
-
 					categoryId: '',
 					isFeatured: false,
 					isArchived: false,
-
 					sizeId: undefined,
 					colorId: undefined,
 					description: undefined,
@@ -283,6 +280,24 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 										<Input
 											disabled={loading}
 											placeholder="Nom du produit"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="stock"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Nombre en stock</FormLabel>
+									<FormControl>
+										<Input
+											type="number"
+											disabled={loading}
+											placeholder="Ajouter une valeur"
 											{...field}
 										/>
 									</FormControl>

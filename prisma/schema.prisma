@@ -99,6 +99,7 @@ model Product {
   images     Image[]
   orderItems OrderItem[]
 
+  stock       Int? 
   description String?
   sizeId      String?
   size        Size?   @relation(fields: [sizeId], references: [id])

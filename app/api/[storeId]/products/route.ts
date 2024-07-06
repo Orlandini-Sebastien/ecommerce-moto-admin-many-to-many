@@ -29,7 +29,7 @@ export async function POST(
 			price,
 			isFeatured,
 			isArchived,
-
+			stock,
 			sizeId,
 			colorId,
 			description,
@@ -85,6 +85,7 @@ export async function POST(
 						data: [...images.map((image: { url: string }) => image)],
 					},
 				},
+				stock,
 				price,
 				isFeatured,
 				isArchived,
