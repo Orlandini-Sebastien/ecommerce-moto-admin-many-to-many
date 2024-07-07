@@ -25,7 +25,7 @@ export const getGraphRevenue = async (storeId: string) => {
 		const month = order.createdAt.getMonth();
 		let revenueForOrder = 0;
 		for (const item of order.orderItems) {
-			revenueForOrder += item.product.price.toNumber();
+			revenueForOrder += item.product.price;
 		}
 		monthlyRevenue[month] = (monthlyRevenue[month] || 0) + revenueForOrder;
 	}
@@ -47,5 +47,5 @@ export const getGraphRevenue = async (storeId: string) => {
 		graphData[parseInt(month)].total = monthlyRevenue[parseInt(month)];
 	}
 
-	return graphData
+	return graphData;
 };
