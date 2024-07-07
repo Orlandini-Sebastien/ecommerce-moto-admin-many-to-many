@@ -123,6 +123,7 @@ export async function GET(
 		const colorId = searchParams.get('colorId') || undefined;
 		const sizeId = searchParams.get('sizeId') || undefined;
 		const isFeatured = searchParams.get('isFeatured');
+		const name = searchParams.get('name') || undefined;
 
 		if (!params.storeId) {
 			return new NextResponse('Store id is required', { status: 400 });
@@ -135,6 +136,12 @@ export async function GET(
 				sizeId,
 				isFeatured: isFeatured ? true : undefined,
 				isArchived: false,
+				name: name
+					? {
+							contains: name,
+							mode: 'insensitive',
+					  }
+					: undefined,
 			},
 			include: {
 				images: true,
@@ -146,6 +153,13 @@ export async function GET(
 				createdAt: 'desc',
 			},
 		});
+
+		const response = NextResponse.json(products);
+		response.headers.set('Access-Control-Allow-Origin', '*');
+		response.headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+		response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+
+		return response;
 
 		return NextResponse.json(products);
 	} catch (error) {
