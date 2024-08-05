@@ -66,13 +66,6 @@ export const AboutClient: React.FC<AboutClientProps> = ({ data }) => {
 			/>
 
 			<SectionAbout
-				title="L'équipe"
-				text={data?.team}
-				image={data?.teamPicture}
-				add={'Ajouter une description de votre équipe ?'}
-			/>
-
-			<SectionAbout
 				title={'Vos services'}
 				text={data?.services}
 				image={data?.servicesPicture}

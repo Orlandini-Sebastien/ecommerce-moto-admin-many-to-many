@@ -170,6 +170,7 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 											rows={9}
 											placeholder={'Introduction de la page'}
 											value={field.value ?? ''}
+											onChange={(e) => field.onChange(e.target.value)}
 										/>
 									</FormControl>
 									<FormMessage />
@@ -185,7 +186,7 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 									<FormControl>
 										<ImageUpload
 											value={field.value ? [field.value] : []}
-											disable={loading}
+											disabled={loading}
 											onChange={(url) => field.onChange(url)}
 											onRemove={() => field.onChange('')}
 											localisation="vervel_moto_piece-2/about"
@@ -212,6 +213,7 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 											rows={9}
 											placeholder={"C'est comme cela que tout à commence"}
 											value={field.value ?? ''}
+											onChange={(e) => field.onChange(e.target.value)}
 										/>
 									</FormControl>
 									<FormMessage />
@@ -227,7 +229,7 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 									<FormControl>
 										<ImageUpload
 											value={field.value ? [field.value] : []}
-											disable={loading}
+											disabled={loading}
 											onChange={(url) => field.onChange(url)}
 											onRemove={() => field.onChange('')}
 											localisation="vervel_moto_piece-2/about"
@@ -254,6 +256,7 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 											rows={9}
 											placeholder={'Petite description'}
 											value={field.value ?? ''}
+											onChange={(e) => field.onChange(e.target.value)}
 										/>
 									</FormControl>
 									<FormMessage />
@@ -269,7 +272,7 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 									<FormControl>
 										<ImageUpload
 											value={field.value ? [field.value] : []}
-											disable={loading}
+											disabled={loading}
 											onChange={(url) => field.onChange(url)}
 											onRemove={() => field.onChange('')}
 											localisation="vervel_moto_piece-2/about"
@@ -295,6 +298,7 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 											rows={9}
 											placeholder={'Petite description'}
 											value={field.value ?? ''}
+											onChange={(e) => field.onChange(e.target.value)}
 										/>
 									</FormControl>
 									<FormMessage />
@@ -310,7 +314,7 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 									<FormControl>
 										<ImageUpload
 											value={field.value ? [field.value] : []}
-											disable={loading}
+											disabled={loading}
 											onChange={(url) => field.onChange(url)}
 											onRemove={() => field.onChange('')}
 											localisation="vervel_moto_piece-2/about"
@@ -337,6 +341,7 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 											rows={9}
 											placeholder={'Je fais ceci car ...'}
 											value={field.value ?? ''}
+											onChange={(e) => field.onChange(e.target.value)}
 										/>
 									</FormControl>
 									<FormMessage />
@@ -352,7 +357,7 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 									<FormControl>
 										<ImageUpload
 											value={field.value ? [field.value] : []}
-											disable={loading}
+											disabled={loading}
 											onChange={(url) => field.onChange(url)}
 											onRemove={() => field.onChange('')}
 											localisation="vervel_moto_piece-2/about"
@@ -379,6 +384,7 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 											rows={9}
 											placeholder={'Le truc de ouf'}
 											value={field.value ?? ''}
+											onChange={(e) => field.onChange(e.target.value)}
 										/>
 									</FormControl>
 									<FormMessage />
@@ -394,7 +400,7 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 									<FormControl>
 										<ImageUpload
 											value={field.value ? [field.value] : []}
-											disable={loading}
+											disabled={loading}
 											onChange={(url) => field.onChange(url)}
 											onRemove={() => field.onChange('')}
 											localisation="vervel_moto_piece-2/about"
@@ -421,6 +427,7 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 											rows={9}
 											placeholder={'Le truc de ouf'}
 											value={field.value ?? ''}
+											onChange={(e) => field.onChange(e.target.value)}
 										/>
 									</FormControl>
 									<FormMessage />
@@ -436,7 +443,7 @@ export const AboutForm: React.FC<AboutFormProps> = ({ initalData }) => {
 									<FormControl>
 										<ImageUpload
 											value={field.value ? [field.value] : []}
-											disable={loading}
+											disabled={loading}
 											onChange={(url) => field.onChange(url)}
 											onRemove={() => field.onChange('')}
 											localisation="vervel_moto_piece-2/about"
