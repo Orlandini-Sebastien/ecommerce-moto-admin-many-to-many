@@ -48,8 +48,6 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 	initalData,
 	billboards,
 }) => {
-
-	
 	const params = useParams();
 	const router = useRouter();
 
@@ -183,7 +181,9 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 												/>
 											</SelectTrigger>
 										</FormControl>
-										<SelectContent>
+										<SelectContent
+											style={{ maxHeight: '200px', overflowY: 'auto' }}
+										>
 											{billboards.map((billboard) => (
 												<SelectItem key={billboard.id} value={billboard.id}>
 													{billboard.label}
