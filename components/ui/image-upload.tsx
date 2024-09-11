@@ -60,7 +60,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 			{/* Ajout d'un folder en dur */}
 			<CldUploadWidget
 				onUpload={onUpload}
-				uploadPreset="hawzgdbb"
+				uploadPreset="jwd3yczt"
 				options={{ folder: `${localisation}` }}
 			>
 				{({ open }) => {
