@@ -28,6 +28,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 	}, []);
 
 	const onUpload = (result: any) => {
+		console.log(result); // Ajoutez cette ligne pour vérifier le résultat de l'upload
 		onChange(result.info.secure_url);
 	};
 
@@ -59,7 +60,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 			</div>
 			{/* Ajout d'un folder en dur */}
 			<CldUploadWidget
-				onUpload={onUpload}
+				onSuccess={onUpload}
 				uploadPreset="jwd3yczt"
 				options={{ folder: `${localisation}` }}
 			>
