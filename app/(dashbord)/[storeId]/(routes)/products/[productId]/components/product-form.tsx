@@ -112,6 +112,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 					sizeId: initialData.sizeId ?? undefined,
 					description: initialData.description ?? undefined,
 					categoryId: categories.map((cat) => cat.name).toString(),
+					images: initialData.images.length > 0 ? initialData.images : [],
 			  }
 			: {
 					name: '',
@@ -254,14 +255,22 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 									<ImageUpload
 										value={field.value.map((image) => image.url)}
 										disable={loading}
-										onChange={(url) =>
-											field.onChange([...field.value, { url }])
-										}
-										onRemove={(url) =>
-											field.onChange([
-												...field.value.filter((current) => current.url !== url),
-											])
-										}
+										onSuccess={(url) => {
+											console.log('product-form >>> initial :', field.value);
+											console.log('product-form >>> URL ajoutée :', url);
+											// Ajoutez l'image seulement si elle n'existe pas déjà
+											const updatedImages = [...field.value, { url }];
+											if (!field.value.some((image) => image.url === url)) {
+												console.log('Valeur mise à jour :', updatedImages);
+												field.onChange(updatedImages); // Met à jour le champ avec la nouvelle liste d'images
+											}
+										}}
+										onRemove={(url) => {
+											// Suppression de l'URL de la liste des images
+											field.onChange(
+												field.value.filter((current) => current.url !== url)
+											);
+										}}
 										localisation="vervel_moto_piece-2/product"
 									/>
 								</FormControl>
@@ -351,11 +360,11 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 													aria-labelledby="options-menu"
 												>
 													{categories.map((category) => (
-														<div key={category.id} className="flex flex-col gap-1 p-2">
-															<div
-																className="flex gap-1 items-center "
-																
-															>
+														<div
+															key={category.id}
+															className="flex flex-col gap-1 p-2"
+														>
+															<div className="flex gap-1 items-center ">
 																<input
 																	className="hidden"
 																	id={'input' + category.id}

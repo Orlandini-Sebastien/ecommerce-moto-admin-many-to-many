@@ -20,7 +20,8 @@ export async function POST(
 		const { userId } = auth();
 		const body = await req.json();
 
-		console.log(body);
+		// Ajout de logs pour vérifier le contenu du body
+		console.log('Body:', body);
 
 		const {
 			name,
@@ -35,48 +36,59 @@ export async function POST(
 			description,
 		} = body;
 
+		// Vérification de l'authentification
 		if (!userId) {
 			return new NextResponse('Unauthenticated', { status: 401 });
 		}
 
+		// Vérification des champs obligatoires
 		if (!name) {
 			return new NextResponse('Name is required', { status: 400 });
 		}
 
-		if (!images || images.lenght === 0) {
+		if (!images || images.length === 0) {
 			return new NextResponse('Images are required', { status: 400 });
 		}
 
 		if (!price) {
 			return new NextResponse('Price is required', { status: 400 });
 		}
+
 		if (!categoryId) {
 			return new NextResponse('Category id is required', { status: 400 });
 		}
-
-		//Conversion de la chaine string de id en un tableau
-
-		const separatedCategoryIds = separateCategoryIds(categoryId);
 
 		if (!params.storeId) {
 			return new NextResponse('Store id is required', { status: 400 });
 		}
 
-		// Verification si le storeId existe pour le user
-		// Le user peut aller que sur son store et pas sur les autre d'autre user
+		// Conversion de la chaine string de ids en un tableau
+		const separatedCategoryIds = separateCategoryIds(categoryId);
+
+		// Vérification si le storeId existe pour cet utilisateur
 		const storeByUserId = await prismadb.store.findFirst({
 			where: {
 				id: params.storeId,
 				userId,
 			},
 		});
+
 		if (!storeByUserId) {
 			return new NextResponse('Unauthorized', { status: 403 });
 		}
-		// -------------------------------------------
 
-		console.log('here we go');
+		// Vérification finale avant création
+		console.log('Creating product with data:', {
+			name,
+			stock,
+			price,
+			colorId,
+			sizeId,
+			description,
+			storeId: params.storeId,
+		});
 
+		// Création du produit
 		const product = await prismadb.product.create({
 			data: {
 				name,
@@ -96,6 +108,7 @@ export async function POST(
 			},
 		});
 
+		// Création des catégories associées au produit
 		const productCategories = await prismadb.productCategory.createMany({
 			data: separatedCategoryIds.map((categoryId) => ({
 				productId: product.id,
@@ -103,11 +116,8 @@ export async function POST(
 			})),
 		});
 
+		// Retour du produit créé
 		return NextResponse.json(product);
-
-		// Traitement supplémentaire ici...
-
-		return new NextResponse('Success', { status: 200 });
 	} catch (error) {
 		console.log('[PRODUCTS_POST]', error);
 		return new NextResponse('Internal error', { status: 500 });
@@ -160,8 +170,6 @@ export async function GET(
 		response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
 
 		return response;
-
-		return NextResponse.json(products);
 	} catch (error) {
 		console.log('[PRODUCTS_GET]', error);
 		return new NextResponse('Internal error', { status: 500 });

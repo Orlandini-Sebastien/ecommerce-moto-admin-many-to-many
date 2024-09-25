@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 
 interface ImageUploadProps {
 	disable?: boolean;
-	onChange: (value: string) => void;
+	onSuccess: (value: string) => void;
 	onRemove: (value: string) => void;
 	value: string[];
 	localisation: string;
@@ -17,7 +17,7 @@ interface ImageUploadProps {
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
 	disable,
-	onChange,
+	onSuccess,
 	onRemove,
 	value,
 	localisation,
@@ -28,8 +28,12 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 	}, []);
 
 	const onUpload = (result: any) => {
-		console.log(result); // Ajoutez cette ligne pour vérifier le résultat de l'upload
-		onChange(result.info.secure_url);
+		if (result && result.info) {
+			onSuccess(result.info.secure_url);
+		} else {
+			// Handle error (e.g., show an alert or message)
+			console.error('Upload failed:', result);
+		}
 	};
 
 	if (!isMounted) {
@@ -62,7 +66,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 			<CldUploadWidget
 				onSuccess={onUpload}
 				uploadPreset="jwd3yczt"
-				options={{ folder: `${localisation}` }}
+				options={{ folder: `${localisation}`, multiple: true }}
 			>
 				{({ open }) => {
 					const onClick = () => {
