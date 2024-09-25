@@ -351,11 +351,11 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 													aria-labelledby="options-menu"
 												>
 													{categories.map((category) => (
-														<div key={category.id} className="flex flex-col gap-1 p-2">
-															<div
-																className="flex gap-1 items-center "
-																
-															>
+														<div
+															key={category.id}
+															className="flex flex-col gap-1 p-2"
+														>
+															<div className="flex gap-1 items-center ">
 																<input
 																	className="hidden"
 																	id={'input' + category.id}

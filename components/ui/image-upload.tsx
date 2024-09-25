@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { ImagePlus, Trash } from 'lucide-react';
 import Image from 'next/image';
-import { CldUploadWidget } from 'next-cloudinary';
+import { CldUploadButton, CldUploadWidget } from 'next-cloudinary';
 
 import { Button } from '@/components/ui/button';
 
@@ -59,28 +59,11 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 				))}
 			</div>
 			{/* Ajout d'un folder en dur */}
-			<CldUploadWidget
-				onUpload={onUpload}
+			<CldUploadButton
+				onSuccess={onUpload}
 				uploadPreset="jwd3yczt"
-				options={{ folder: `${localisation}`, multiple: true }}
-			>
-				{({ open }) => {
-					const onClick = () => {
-						open();
-					};
-					return (
-						<Button
-							type="button"
-							disabled={disable}
-							variant={'secondary'}
-							onClick={onClick}
-						>
-							<ImagePlus className="w-4 h-4 mr-2" />
-							Télécharger une image
-						</Button>
-					);
-				}}
-			</CldUploadWidget>
+				options={{ folder: `${localisation}` }}
+			></CldUploadButton>
 		</div>
 	);
 };
